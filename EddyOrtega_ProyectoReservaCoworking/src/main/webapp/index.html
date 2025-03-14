@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Reservas</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+   
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let fechaInput = document.getElementById("fechaReserva");
+
+            // Establecer la fecha mínima como la actual
+            let hoy = new Date().toISOString().split("T")[0];
+            fechaInput.setAttribute("min", hoy);
+
+            // Validar antes de enviar el formulario
+            document.querySelector("form").addEventListener("submit", function (e) {
+                let fechaSeleccionada = new Date(fechaInput.value);
+                let fechaHoy = new Date();
+
+                if (fechaSeleccionada < fechaHoy) {
+                    alert("⚠ No puedes seleccionar una fecha pasada.");
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+    
+    <body>
+        <h1>Haz Tu Reserva Aqui!</h1>
+        
+        <!-- Formulario de reserva -->
+        <form action="ReservaServlet" method="POST">
+            <p><label>Nombre del Usuario</label><input type="text" name="nombre" required placeholder="Ingresa tu nombre"></p>
+            <p><label>Fecha de Reserva</label><input type="date" name="fecha" placeholder="Ingresa la fecha" required id="fechaReserva"></p><!-- El campo de fecha se validará con JavaScript para evitar fechas pasadas -->
+            <p><label>Espacio de trabajo</label><select name="espacio" required>
+            <option value="" disabled selected>Selecciona un espacio</option>
+            <option value="escritorio">Escritorio</option>
+            <option value="salaReuniones">Sala de Reuniones</option>
+            <option value="oficinaPrivada">Oficina Privada</option>
+            </select></p>
+            <p><label>Duracion de la Reserva</label><input type="number" name="duracion" placeholder="Ingresa la duración en horas" required min="1"></p><!-- El campo de duración requiere un número mayor o igual a 1 -->
+            <button type="submit">Reservar</button>
+        </form>
+        <button type="button" onclick="window.location.href='ListaReservasServlet'">
+        Lista de Reservas
+        </button>
+    </body>
+</html>
